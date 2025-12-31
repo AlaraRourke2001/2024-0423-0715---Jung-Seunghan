@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANCO DE DADOS DA POLÍCIA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            color: #e6f1ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(17, 34, 64, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(0, 150, 255, 0.1);
+        }
+        .portal-screen {
+            padding: 40px;
+            transition: all 0.5s ease;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4dabf7;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 10px rgba(77, 171, 247, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        h2 {
+            color: #4dabf7;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(77, 171, 247, 0.3);
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #4dabf7;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-form, .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        label {
+            font-weight: 600;
+            color: #a8c7ff;
+            font-size: 1.1rem;
+        }
+        input, select, textarea {
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #2d4a80;
+            background-color: #0a192f;
+            color: #e6f1ff;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4dabf7;
+            box-shadow: 0 0 0 2px rgba(77, 171, 247, 0.2);
+        }
+        .btn {
+            padding: 15px 30px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg, #1c7ed6, #4dabf7);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(28, 126, 214, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover {
+            background: linear-gradient(90deg, #1864ab, #339af0);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(28, 126, 214, 0.6);
+        }
+        .btn-back {
+            background: linear-gradient(90deg, #495057, #868e96);
+            margin-bottom: 20px;
+            width: 200px;
+        }
+        .btn-back:hover {
+            background: linear-gradient(90deg, #343a40, #495057);
+        }
+        .btn-next {
+            background: linear-gradient(90deg, #37b24d, #40c057);
+            margin-top: 30px;
+            width: 300px;
+            align-self: center;
+        }
+        .btn-next:hover {
+            background: linear-gradient(90deg, #2b8a3e, #37b24d);
+        }
+        .btn-download {
+            background: linear-gradient(90deg, #ff6b6b, #ff8787);
+            margin: 10px;
+            width: 250px;
+        }
+        .btn-download:hover {
+            background: linear-gradient(90deg, #fa5252, #ff6b6b);
+        }
+        .objectives-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .objective-card {
+            background: linear-gradient(145deg, #112240, #0a192f);
+            border-radius: 12px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            min-height: 180px;
+            justify-content: center;
+        }
+        .objective-card:hover {
+            transform: translateY(-10px);
+            border-color: #4dabf7;
+            box-shadow: 0 10px 25px rgba(77, 171, 247, 0.2);
+        }
+        .objective-icon {
+            font-size: 3.5rem;
+            color: #1c7ed6;
+            margin-bottom: 15px;
+        }
+        .objective-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: #4dabf7;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #ff6b6b;
+        }
+        .success-message {
+            color: #40c057;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+            background: rgba(64, 192, 87, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #40c057;
+        }
+        .welcome-message {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: #a8c7ff;
+            background: rgba(77, 171, 247, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4dabf7;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #a8c7ff;
+            border: 1px solid #2d4a80;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c87c7;
+            font-size: 0.9rem;
+            border-top: 1px solid #2d4a80;
+            padding-top: 15px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(77, 171, 247, 0.1);
+            color: #4dabf7;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        .police-badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1c7ed6, #4dabf7);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(28, 126, 214, 0.4);
+        }
+        .police-badge i {
+            font-size: 2.5rem;
+            color: white;
+        }
+        /* Estilos para a página de documentos */
+        .documents-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .document-card {
+            background: linear-gradient(145deg, #112240, #0a192f);
+            border-radius: 10px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            min-height: 220px;
+            justify-content: center;
+            position: relative;
+        }
+        .document-card:hover {
+            transform: translateY(-5px);
+            border-color: #4dabf7;
+            box-shadow: 0 10px 20px rgba(77, 171, 247, 0.2);
+        }
+        .document-icon {
+            font-size: 3.5rem;
+            color: #1c7ed6;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .document-card:hover .document-icon {
+            transform: scale(1.1);
+            color: #4dabf7;
+        }
+        .document-name {
+            font-size: 1.3rem;
+            color: #e6f1ff;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .document-status {
+            font-size: 0.9rem;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 5px 15px;
+            border-radius: 15px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .next-objective-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #2d4a80;
+        }
+        /* Estilos para o sistema de investigação */
+        .investigation-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .investigation-card {
+            background: linear-gradient(145deg, #112240, #0a192f);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .investigation-card:hover {
+            transform: translateY(-5px);
+            border-color: #4dabf7;
+            box-shadow: 0 10px 20px rgba(77, 171, 247, 0.2);
+        }
+        .investigation-icon {
+            font-size: 3.5rem;
+            color: #1c7ed6;
+            margin-bottom: 15px;
+        }
+        .investigation-title {
+            font-size: 1.8rem;
+            color: #4dabf7;
+            font-weight: 600;
+        }
+        /* Estilos para o sistema de perguntas */
+        .question-container {
+            background: rgba(30, 43, 71, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .question-text {
+            font-size: 1.3rem;
+            color: #e6f1ff;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .question-number {
+            color: #4dabf7;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .evidence-counter {
+            color: #4dabf7;
+            font-weight: 600;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .evidence-option {
+            background: rgba(17, 34, 64, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #2d4a80;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .evidence-option:hover {
+            background: rgba(77, 171, 247, 0.1);
+            border-color: #4dabf7;
+        }
+        .evidence-option.selected {
+            background: rgba(64, 192, 87, 0.2);
+            border-color: #40c057;
+        }
+        .evidence-checkbox {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        .evidence-label {
+            color: #e6f1ff;
+            font-size: 0.95rem;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        /* ESTILOS REMOVIDOS: progress-indicator, progress-step, etc. */
+        /* Estilos para a tela final */
+        .final-message {
+            text-align: center;
+            padding: 30px;
+            background: rgba(30, 43, 71, 0.8);
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .final-title {
+            font-size: 2.5rem;
+            color: #4dabf7;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(77, 171, 247, 0.3);
+        }
+        .final-text {
+            font-size: 1.4rem;
+            color: #e6f1ff;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .downloads-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .celebration-icon {
+            font-size: 4rem;
+            color: #40c057;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @media (max-width: 768px) {
+            .container { border-radius: 10px; }
+            .portal-screen { padding: 25px 20px; }
+            h1 { font-size: 1.8rem; flex-direction: column; gap: 10px; }
+            .objectives-container, .documents-container, .investigation-options { grid-template-columns: 1fr; }
+            .police-badge { width: 50px; height: 50px; }
+            .police-badge i { font-size: 2rem; }
+            .evidence-grid { grid-template-columns: 1fr; }
+            .buttons-container { flex-direction: column; }
+            .btn { width: 100%; }
+            .downloads-container { flex-direction: column; align-items: center; }
+            .final-title { font-size: 2rem; }
+            .final-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login (inicial) -->
+    <div class="container" id="loginContainer">
+        <div class="portal-screen" id="loginScreen">
+            <div class="police-badge">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1>BANCO DE DADOS DA POLÍCIA</h1>
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Login</label>
+                    <input type="text" id="username" placeholder="Digite seu login">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-key"></i> Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha">
+                </div>
+                <button class="btn" id="loginBtn">Entrar</button>
+                <div class="error-message" id="errorMessage">Login ou senha incorretos.</div>
+                <div class="footer">
+                    <p>Sistema confidencial - Acesso restrito ao Departamento de Polícia de Seul</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela do Dashboard (após login) -->
+    <div class="container" id="dashboardContainer" style="display: none;">
+        <div class="portal-screen" id="dashboardScreen">
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Encerrar Sessão</button>
+            <div class="police-badge">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1>BANCO DE DADOS DA POLÍCIA <span class="badge">Sistema Interno</span></h1>
+            <div class="welcome-message" id="welcomeMessage">Bem-vindo, detetive! Selecione um objetivo para continuar.</div>
+            <div class="dashboard">
+                <h2>CASO 2024-0423-0715</h2>
+                <div class="objectives-container">
+                    <div class="objective-card" id="objetivoA">
+                        <div class="objective-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <h3>OBJETIVO A</h3>
+                    </div>
+                    <div class="objective-card" id="objetivoB">
+                        <div class="objective-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3>OBJETIVO B</h3>
+                    </div>
+                    <div class="objective-card" id="objetivoC">
+                        <div class="objective-icon">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <h3>OBJETIVO C</h3>
+                    </div>
+                </div>
+                <div class="footer">
+                    <p>Sistema confidencial - Acesso restrito ao Departamento de Polícia de Seul</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela do Objetivo A - Documentos do Caso -->
+    <div class="container" id="objetivoAContainer" style="display: none;">
+        <div class="portal-screen" id="objetivoAScreen">
+            <button class="btn btn-back" id="backFromObjetivoA"><i class="fas fa-arrow-left"></i> Voltar aos Objetivos</button>
+            <div class="police-badge">
+                <i class="fas fa-fingerprint"></i>
+            </div>
+            <h1>DOCUMENTOS DO CASO <span class="badge">OBJETIVO A</span></h1>
+            <div class="welcome-message" id="objetivoAWelcome">Documentos dos suspeitos:</div>
+            
+            <div class="documents-container">
+                <!-- Choi Hana -->
+                <div class="document-card" onclick="downloadPDF('Choi Hana')">
+                    <div class="document-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <div class="document-name">Choi Hana</div>
+                        <div class="document-status">CONFIDENCIAL</div>
+                    </div>
+                </div>
+                
+                <!-- Kim Hyunwoo -->
+                <div class="document-card" onclick="downloadPDF('Kim Hyunwoo')">
+                    <div class="document-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <div class="document-name">Kim Hyunwoo</div>
+                        <div class="document-status">CONFIDENCIAL</div>
+                    </div>
+                </div>
+                
+                <!-- Lee Seojun -->
+                <div class="document-card" onclick="downloadPDF('Lee Seojun')">
+                    <div class="document-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <div class="document-name">Lee Seojun</div>
+                        <div class="document-status">CONFIDENCIAL</div>
+                    </div>
+                </div>
+                
+                <!-- Song Mina -->
+                <div class="document-card" onclick="downloadPDF('Song Mina')">
+                    <div class="document-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <div class="document-name">Song Mina</div>
+                        <div class="document-status">CONFIDENCIAL</div>
+                    </div>
+                </div>
+                
+                <!-- Park Joonyoung -->
+                <div class="document-card" onclick="downloadPDF('Park Joonyoung')">
+                    <div class="document-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <div class="document-name">Park Joonyoung</div>
+                        <div class="document-status">CONFIDENCIAL</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="next-objective-container">
+                <button class="btn btn-next" id="nextToObjetivoB">
+                    <i class="fas fa-arrow-right"></i> Prosseguir para o Objetivo B
+                </button>
+            </div>
+            
+            <div class="footer">
+                <p>Sistema confidencial - Acesso restrito ao Departamento de Polícia de Seul</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela do Objetivo B - Sistema de Investigação -->
+    <div class="container" id="objetivoBContainer" style="display: none;">
+        <div class="portal-screen" id="objetivoBScreen">
+            <button class="btn btn-back" id="backFromObjetivoB"><i class="fas fa-arrow-left"></i> Voltar aos Documentos</button>
+            <div class="police-badge">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <h1>ANÁLISE DE EVIDÊNCIAS <span class="badge">OBJETIVO B</span></h1>
+            <div class="welcome-message">Analise as evidências e identifique os suspeitos inocentes.</div>
+            
+            <!-- Opções do Objetivo B -->
+            <div class="investigation-options">
+                <!-- Opção 1: Baixar PDF -->
+                <div class="investigation-card" onclick="downloadObjectiveBPDF()">
+                    <div class="investigation-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="investigation-title">OBJETIVO B</div>
+                </div>
+                
+                <!-- Opção 2: Sistema de Investigação -->
+                <div class="investigation-card" onclick="startInvestigation()">
+                    <div class="investigation-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="investigation-title">RESPONDER</div>
+                </div>
+            </div>
+            
+            <!-- Sistema de Investigação (inicialmente oculto) -->
+            <div id="investigationSystem" style="display: none;">
+                <!-- SUSPEITO 1: Nome -->
+                <div class="question-container" id="questionSuspect1">
+                    <div class="question-number">SUSPEITO INOCENTE 1</div>
+                    <div class="question-text">Identifique o primeiro suspeito que pode ser inocentado (digite em MAIÚSCULO):</div>
+                    <input type="text" id="suspect1Name" placeholder="Nome do suspeito" style="width: 100%;">
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkSuspect1()">Verificar</button>
+                        <button class="btn" onclick="resetInvestigation()" style="background: #868e96;">
+                            <i class="fas fa-redo"></i> Recomeçar
+                        </button>
+                    </div>
+                    <div class="error-message" id="suspect1Error"></div>
+                </div>
+                
+                <!-- SUSPEITO 1: Evidências -->
+                <div class="question-container" id="questionEvidence1" style="display: none;">
+                    <div class="question-number">EVIDÊNCIAS PARA SUSPEITO 1</div>
+                    <div class="question-text">Selecione as evidências que comprovam a inocência de <span id="currentSuspect1"></span>:</div>
+                    <div class="evidence-counter" id="counter1"></div>
+                    
+                    <div class="evidence-grid" id="evidenceGrid1">
+                        <!-- As opções serão inseridas aqui pelo JavaScript -->
+                    </div>
+                    
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkEvidence1()">Verificar Evidências</button>
+                        <button class="btn" onclick="backToSuspect1()" style="background: #868e96;">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                    <div class="error-message" id="evidence1Error"></div>
+                </div>
+                
+                <!-- SUSPEITO 2: Nome -->
+                <div class="question-container" id="questionSuspect2" style="display: none;">
+                    <div class="question-number">SUSPEITO INOCENTE 2</div>
+                    <div class="question-text">Identifique o segundo suspeito que pode ser inocentado (digite em MAIÚSCULO):</div>
+                    <input type="text" id="suspect2Name" placeholder="Nome do suspeito" style="width: 100%;">
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkSuspect2()">Verificar</button>
+                        <button class="btn" onclick="backToEvidence1()" style="background: #868e96;">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                    <div class="error-message" id="suspect2Error"></div>
+                </div>
+                
+                <!-- SUSPEITO 2: Evidências -->
+                <div class="question-container" id="questionEvidence2" style="display: none;">
+                    <div class="question-number">EVIDÊNCIAS PARA SUSPEITO 2</div>
+                    <div class="question-text">Selecione as evidências que comprovam a inocência de <span id="currentSuspect2"></span>:</div>
+                    <div class="evidence-counter" id="counter2"></div>
+                    
+                    <div class="evidence-grid" id="evidenceGrid2">
+                        <!-- As opções serão inseridas aqui pelo JavaScript -->
+                    </div>
+                    
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkEvidence2()">Verificar Evidências</button>
+                        <button class="btn" onclick="backToSuspect2()" style="background: #868e96;">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                    <div class="error-message" id="evidence2Error"></div>
+                </div>
+                
+                <!-- Conclusão -->
+                <div id="investigationComplete" style="display: none; text-align: center; margin-top: 30px;">
+                    <div class="success-message" style="display: block;">
+                        <i class="fas fa-check-circle"></i> Análise completa! Ambos os suspeitos inocentes identificados.
+                    </div>
+                    <button class="btn btn-next" onclick="goToObjectiveC()">
+                        <i class="fas fa-arrow-right"></i> Prosseguir para o Objetivo C
+                    </button>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Sistema confidencial - Acesso restrito ao Departamento de Polícia de Seul</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela do Objetivo C - Investigação Final -->
+    <div class="container" id="objetivoCContainer" style="display: none;">
+        <div class="portal-screen" id="objetivoCScreen">
+            <button class="btn btn-back" id="backFromObjetivoC"><i class="fas fa-arrow-left"></i> Voltar à Análise</button>
+            <div class="police-badge">
+                <i class="fas fa-microscope"></i>
+            </div>
+            <h1>INVESTIGAÇÃO FINAL <span class="badge">OBJETIVO C</span></h1>
+            <div class="welcome-message" id="objetivoCWelcome">Identifique o assassino e as evidências conclusivas.</div>
+            
+            <!-- Opções do Objetivo C -->
+            <div class="investigation-options">
+                <!-- Opção 1: Baixar PDF -->
+                <div class="investigation-card" onclick="downloadObjectiveCPDF()">
+                    <div class="investigation-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="investigation-title">OBJETIVO C</div>
+                </div>
+                
+                <!-- Opção 2: Sistema de Investigação -->
+                <div class="investigation-card" onclick="startMurderInvestigation()">
+                    <div class="investigation-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="investigation-title">RESPONDER</div>
+                </div>
+            </div>
+            
+            <!-- Sistema de Investigação do Assassino (inicialmente oculto) -->
+            <div id="murderInvestigationSystem" style="display: none;">
+                <!-- PERGUNTA 1: Quem é o assassino -->
+                <div class="question-container" id="questionMurderer">
+                    <div class="question-number">IDENTIFICAÇÃO DO ASSASSINO</div>
+                    <div class="question-text">Quem matou Jung Seunghan? (digite em MAIÚSCULO):</div>
+                    <input type="text" id="murdererName" placeholder="Nome do assassino" style="width: 100%;">
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkMurderer()">Verificar</button>
+                        <button class="btn" onclick="resetMurderInvestigation()" style="background: #868e96;">
+                            <i class="fas fa-redo"></i> Recomeçar
+                        </button>
+                    </div>
+                    <div class="error-message" id="murdererError"></div>
+                </div>
+                
+                <!-- PERGUNTA 2: Evidências do assassinato -->
+                <div class="question-container" id="questionMurderEvidence" style="display: none;">
+                    <div class="question-number">EVIDÊNCIAS CONCLUSIVAS</div>
+                    <div class="question-text">Quais evidências provam quem é o assassino?</div>
+                    <div class="evidence-counter">Selecione 4 evidências</div>
+                    
+                    <div class="evidence-grid" id="murderEvidenceGrid">
+                        <!-- As opções serão inseridas aqui pelo JavaScript -->
+                    </div>
+                    
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkMurderEvidence()">Verificar Evidências</button>
+                        <button class="btn" onclick="backToMurdererQuestion()" style="background: #868e96;">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                    <div class="error-message" id="murderEvidenceError"></div>
+                </div>
+                
+                <!-- Botão para ir para a tela final -->
+                <div id="murderInvestigationComplete" style="display: none; text-align: center; margin-top: 30px;">
+                    <div class="success-message" style="display: block; margin-bottom: 20px;">
+                        <i class="fas fa-check-circle"></i> Investigação completa! Assassino identificado.
+                    </div>
+                    <button class="btn btn-next" onclick="showFinalScreen()">
+                        <i class="fas fa-trophy"></i> Ver Conclusão do Caso
+                    </button>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Sistema confidencial - Acesso restrito ao Departamento de Polícia de Seul</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVA TELA FINAL -->
+    <div class="container" id="finalContainer" style="display: none;">
+        <div class="portal-screen" id="finalScreen">
+            <button class="logout-btn" id="backFromFinal"><i class="fas fa-sign-out-alt"></i> Encerrar Sessão</button>
+            
+            <div class="celebration-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            
+            <h1>CASO RESOLVIDO! <span class="badge">MISSÃO CUMPRIDA</span></h1>
+            
+            <div class="final-message">
+                <div class="final-title">BOM TRABALHO, DETETIVE!</div>
+                
+                <div class="final-text">
+                    Graças às suas excepcionais habilidades de dedução e análise forense, 
+                    <strong>Kim Hyunwoo</strong> foi preso e confessou o assassinato de Jung Seunghan.
+                    Os pais de Jung Seunghan e milhões de fãs em toda a Coreia agradecem por ter levado 
+                    o culpado à justiça e trazido paz à memória da vítima<br><br>
+                </div>
+                
+                <div class="downloads-container">
+                    <button class="btn btn-download" onclick="downloadConfissaoPDF()">
+                        <i class="fas fa-file-pdf"></i> Baixar confissão do culpado
+                    </button>
+                    <button class="btn btn-download" onclick="downloadResolucaoPDF()">
+                        <i class="fas fa-file-pdf"></i> Baixar resolução do caso
+                    </button>
+                </div>
+                
+                <div style="margin-top: 40px;">
+                    <button class="btn btn-next" onclick="backToDashboardFromFinal()">
+                        <i class="fas fa-home"></i> Voltar ao Início
+                    </button>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Departamento de Polícia de Seul - Agradece seu serviço exemplar</p>
+                <p style="margin-top: 10px; color: #4dabf7; font-size: 0.8rem;">
+                    <i class="fas fa-star"></i> Caso concluído com sucesso
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== CONFIGURAÇÕES GERAIS ==========
+        const loginContainer = document.getElementById('loginContainer');
+        const dashboardContainer = document.getElementById('dashboardContainer');
+        const objetivoAContainer = document.getElementById('objetivoAContainer');
+        const objetivoBContainer = document.getElementById('objetivoBContainer');
+        const objetivoCContainer = document.getElementById('objetivoCContainer');
+        const finalContainer = document.getElementById('finalContainer');
+        
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const backFromObjetivoA = document.getElementById('backFromObjetivoA');
+        const backFromObjetivoB = document.getElementById('backFromObjetivoB');
+        const backFromObjetivoC = document.getElementById('backFromObjetivoC');
+        const backFromFinal = document.getElementById('backFromFinal');
+        const nextToObjetivoB = document.getElementById('nextToObjetivoB');
+        const objetivoA = document.getElementById('objetivoA');
+        const objetivoB = document.getElementById('objetivoB');
+        const objetivoC = document.getElementById('objetivoC');
+        
+        const errorMessage = document.getElementById('errorMessage');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const objetivoAWelcome = document.getElementById('objetivoAWelcome');
+        const objetivoCWelcome = document.getElementById('objetivoCWelcome');
+        
+        // NOVAS CREDENCIAIS
+        const validUsername = "park.jiho@policia.kr";
+        const validPassword = "JS1998BUSAN";
+        
+        // ========== VARIÁVEIS DO SISTEMA DE INVESTIGAÇÃO ==========
+        let suspect1 = null;
+        let suspect2 = null;
+        let selectedEvidences1 = new Set();
+        let selectedEvidences2 = new Set();
+        let currentStep = 1;
+        
+        // ========== VARIÁVEIS DO OBJETIVO C ==========
+        let murdererIdentified = false;
+        let selectedMurderEvidences = new Set();
+        
+        // Lista completa de evidências
+        const allEvidences = [
+            "Bilhete - Park Joonyoung",
+            "CCTV - Choi Hana",
+            "Chat - Hyunwoo",
+            "Chat - Park Joonyoung",
+            "Chat - Song Mina",
+            "Declaração - Song Mina",
+            "Depoimento - Choi Hana",
+            "Depoimento - Jang Seoyeon",
+            "Depoimento - Kim Hyunwoo",
+            "Depoimento - Kim Jihoon",
+            "Depoimento - Lee Seojun",
+            "Depoimento - Park Joonyoung",
+            "Depoimento - Song Mina",
+            "Entrevista - Choi Hana",
+            "Entrevista - Kim Hyunwoo",
+            "Entrevista - Lee Seojun",
+            "Entrevista - Park Joonyoung",
+            "Entrevista - Song Mina",
+            "Evidência - Arma",
+            "Evidência - Celular",
+            "E-mail - Seojun",
+            "Ficha criminal - Choi Hana",
+            "Foto da adolescência - Hyunwoo & Seunghan",
+            "Foto da cena do crime - Seunghan",
+            "Foto no restaurante - Song Mina",
+            "Korean Times - Seojun",
+            "Laudo pericial",
+            "Perfil da vítima",
+            "Pessoas de interesse",
+            "Post no Instagram - Choi Hana",
+            "Posts nas mídias sociais",
+            "Recibo - Hyunwoo",
+            "Relatório da autópsia",
+            "Relatório do incidente",
+            "Ultrassom - Song Mina"
+        ];
+        
+        // Respostas corretas OBJETIVO B
+        const correctAnswers = {
+            "SONG MINA": ["Declaração - Song Mina", "Foto no restaurante - Song Mina"],
+            "LEE SEOJUN": ["Depoimento - Lee Seojun"]
+        };
+        
+        // Respostas corretas OBJETIVO C
+        const correctMurderer = "KIM HYUNWOO";
+        const correctMurderEvidences = [
+            "Recibo - Hyunwoo",
+            "Foto da adolescência - Hyunwoo & Seunghan",
+            "Laudo pericial",
+            "Depoimento - Kim Hyunwoo"
+        ];
+        
+        // ========== FUNÇÕES DE NAVEGAÇÃO ATUALIZADAS ==========
+        function showScreen(screenContainer) {
+            loginContainer.style.display = 'none';
+            dashboardContainer.style.display = 'none';
+            objetivoAContainer.style.display = 'none';
+            objetivoBContainer.style.display = 'none';
+            objetivoCContainer.style.display = 'none';
+            finalContainer.style.display = 'none';
+            screenContainer.style.display = 'block';
+        }
+        
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === validUsername && password === validPassword) {
+                errorMessage.style.display = 'none';
+                showScreen(dashboardContainer);
+                welcomeMessage.textContent = `Bem-vindo, detetive! Selecione um objetivo para continuar.`;
+            } else {
+                errorMessage.textContent = 'Login ou senha incorretos.';
+                errorMessage.style.display = 'block';
+                document.getElementById('username').style.borderColor = '#ff6b6b';
+                document.getElementById('password').style.borderColor = '#ff6b6b';
+                setTimeout(() => {
+                    document.getElementById('username').style.borderColor = '#2d4a80';
+                    document.getElementById('password').style.borderColor = '#2d4a80';
+                }, 2000);
+            }
+        }
+        
+        function logout() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showScreen(loginContainer);
+        }
+        
+        function showObjetivoA() { showScreen(objetivoAContainer); }
+        function showObjetivoB() { 
+            showScreen(objetivoBContainer); 
+            resetInvestigationSystem();
+        }
+        function showObjetivoC() { 
+            showScreen(objetivoCContainer); 
+            resetMurderInvestigationSystem();
+        }
+        function showFinalScreen() { showScreen(finalContainer); }
+        
+        function backToDashboardFromA() { showScreen(dashboardContainer); }
+        function backToObjetivoAFromB() { showScreen(objetivoAContainer); }
+        function backToObjetivoBFromC() { showScreen(objetivoBContainer); }
+        function backToDashboardFromFinal() { showScreen(dashboardContainer); }
+        
+        // ========== FUNÇÕES DO OBJETIVO A (PDFs) ==========
+        function downloadPDF(suspectName) {
+            const pdfFiles = {
+                'Choi Hana': 'choi_hana.pdf',
+                'Kim Hyunwoo': 'kim_hyunwoo.pdf', 
+                'Lee Seojun': 'lee_seojun.pdf',
+                'Song Mina': 'song_mina.pdf',
+                'Park Joonyoung': 'park_joonyoung.pdf'
+            };
+            
+            const fileName = pdfFiles[suspectName];
+            
+            if (fileName) {
+                const pdfUrl = `pdfs/${fileName}`;
+                
+                const link = document.createElement('a');
+                link.href = pdfUrl;
+                link.download = fileName;
+                link.target = '_blank';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert(`Arquivo PDF para ${suspectName} não encontrado!`);
+            }
+        }
+        
+        // ========== FUNÇÕES DO OBJETIVO B ==========
+        function downloadObjectiveBPDF() {
+            const link = document.createElement('a');
+            link.href = 'pdfs/objetivo_b.pdf';
+            link.download = 'objetivo_b.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function startInvestigation() {
+            document.getElementById('investigationSystem').style.display = 'block';
+        }
+        
+        function resetInvestigationSystem() {
+            document.getElementById('investigationSystem').style.display = 'none';
+            resetInvestigation();
+        }
+        
+        function resetInvestigation() {
+            suspect1 = null;
+            suspect2 = null;
+            selectedEvidences1.clear();
+            selectedEvidences2.clear();
+            currentStep = 1;
+            
+            document.getElementById('questionSuspect1').style.display = 'block';
+            document.getElementById('questionEvidence1').style.display = 'none';
+            document.getElementById('questionSuspect2').style.display = 'none';
+            document.getElementById('questionEvidence2').style.display = 'none';
+            document.getElementById('investigationComplete').style.display = 'none';
+            
+            document.getElementById('suspect1Name').value = '';
+            document.getElementById('suspect2Name').value = '';
+            document.getElementById('suspect1Error').style.display = 'none';
+            document.getElementById('suspect2Error').style.display = 'none';
+            document.getElementById('evidence1Error').style.display = 'none';
+            document.getElementById('evidence2Error').style.display = 'none';
+        }
+        
+        // ========== SUSPEITO 1 ==========
+        function checkSuspect1() {
+            const input = document.getElementById('suspect1Name').value.trim();
+            const errorEl = document.getElementById('suspect1Error');
+            
+            errorEl.style.display = 'none';
+            
+            if (input === 'SONG MINA' || input === 'LEE SEOJUN') {
+                suspect1 = input;
+                document.getElementById('currentSuspect1').textContent = input;
+                
+                document.getElementById('questionSuspect1').style.display = 'none';
+                document.getElementById('questionEvidence1').style.display = 'block';
+                
+                const count = correctAnswers[suspect1].length;
+                document.getElementById('counter1').textContent = 
+                    count === 1 ? "Selecione 1 evidência" : "Selecione 2 evidências";
+                
+                generateEvidenceGrid('evidenceGrid1', suspect1);
+                
+            } else {
+                errorEl.textContent = 'Resposta incorreta. Continue analisando as evidências.';
+                errorEl.style.display = 'block';
+                document.getElementById('suspect1Name').style.borderColor = '#ff6b6b';
+                setTimeout(() => {
+                    document.getElementById('suspect1Name').style.borderColor = '#2d4a80';
+                }, 2000);
+            }
+        }
+        
+        function checkEvidence1() {
+            const errorEl = document.getElementById('evidence1Error');
+            errorEl.style.display = 'none';
+            
+            if (selectedEvidences1.size === 0) {
+                const count = correctAnswers[suspect1].length;
+                errorEl.textContent = count === 1 ? 
+                    "Selecione 1 evidência." : "Selecione 2 evidências.";
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            const correct = correctAnswers[suspect1];
+            const selectedArray = Array.from(selectedEvidences1);
+            
+            const allCorrect = selectedArray.length === correct.length &&
+                              selectedArray.every(ev => correct.includes(ev));
+            
+            if (allCorrect) {
+                document.getElementById('questionEvidence1').style.display = 'none';
+                document.getElementById('questionSuspect2').style.display = 'block';
+            } else {
+                errorEl.textContent = 'Combinação incorreta de evidências.';
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        function backToSuspect1() {
+            document.getElementById('questionEvidence1').style.display = 'none';
+            document.getElementById('questionSuspect1').style.display = 'block';
+        }
+        
+        // ========== SUSPEITO 2 ==========
+        function checkSuspect2() {
+            const input = document.getElementById('suspect2Name').value.trim();
+            const errorEl = document.getElementById('suspect2Error');
+            
+            errorEl.style.display = 'none';
+            
+            if ((input === 'SONG MINA' || input === 'LEE SEOJUN') && input !== suspect1) {
+                suspect2 = input;
+                document.getElementById('currentSuspect2').textContent = input;
+                
+                document.getElementById('questionSuspect2').style.display = 'none';
+                document.getElementById('questionEvidence2').style.display = 'block';
+                
+                const count = correctAnswers[suspect2].length;
+                document.getElementById('counter2').textContent = 
+                    count === 1 ? "Selecione 1 evidência" : "Selecione 2 evidências";
+                
+                generateEvidenceGrid('evidenceGrid2', suspect2);
+                
+            } else if (input === suspect1) {
+                errorEl.textContent = 'Este suspeito já foi identificado.';
+                errorEl.style.display = 'block';
+                document.getElementById('suspect2Name').style.borderColor = '#ff6b6b';
+                setTimeout(() => {
+                    document.getElementById('suspect2Name').style.borderColor = '#2d4a80';
+                }, 2000);
+            } else {
+                errorEl.textContent = 'Resposta incorreta. Continue analisando as evidências.';
+                errorEl.style.display = 'block';
+                document.getElementById('suspect2Name').style.borderColor = '#ff6b6b';
+                setTimeout(() => {
+                    document.getElementById('suspect2Name').style.borderColor = '#2d4a80';
+                }, 2000);
+            }
+        }
+        
+        function checkEvidence2() {
+            const errorEl = document.getElementById('evidence2Error');
+            errorEl.style.display = 'none';
+            
+            if (selectedEvidences2.size === 0) {
+                const count = correctAnswers[suspect2].length;
+                errorEl.textContent = count === 1 ? 
+                    "Selecione 1 evidência." : "Selecione 2 evidências.";
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            const correct = correctAnswers[suspect2];
+            const selectedArray = Array.from(selectedEvidences2);
+            
+            const allCorrect = selectedArray.length === correct.length &&
+                              selectedArray.every(ev => correct.includes(ev));
+            
+            if (allCorrect) {
+                document.getElementById('questionEvidence2').style.display = 'none';
+                document.getElementById('investigationComplete').style.display = 'block';
+            } else {
+                errorEl.textContent = 'Combinação incorreta de evidências.';
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        function backToSuspect2() {
+            document.getElementById('questionEvidence2').style.display = 'none';
+            document.getElementById('questionSuspect2').style.display = 'block';
+        }
+        
+        function backToEvidence1() {
+            document.getElementById('questionSuspect2').style.display = 'none';
+            document.getElementById('questionEvidence1').style.display = 'block';
+        }
+        
+        // ========== FUNÇÕES DO OBJETIVO C ==========
+        function downloadObjectiveCPDF() {
+            const link = document.createElement('a');
+            link.href = 'pdfs/objetivo_c.pdf';
+            link.download = 'objetivo_c.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function startMurderInvestigation() {
+            document.getElementById('murderInvestigationSystem').style.display = 'block';
+        }
+        
+        function resetMurderInvestigationSystem() {
+            document.getElementById('murderInvestigationSystem').style.display = 'none';
+            resetMurderInvestigation();
+        }
+        
+        function resetMurderInvestigation() {
+            murdererIdentified = false;
+            selectedMurderEvidences.clear();
+            
+            document.getElementById('questionMurderer').style.display = 'block';
+            document.getElementById('questionMurderEvidence').style.display = 'none';
+            document.getElementById('murderInvestigationComplete').style.display = 'none';
+            
+            document.getElementById('murdererName').value = '';
+            document.getElementById('murdererError').style.display = 'none';
+            document.getElementById('murderEvidenceError').style.display = 'none';
+        }
+        
+        function checkMurderer() {
+            const input = document.getElementById('murdererName').value.trim();
+            const errorEl = document.getElementById('murdererError');
+            
+            errorEl.style.display = 'none';
+            
+            if (input === correctMurderer) {
+                murdererIdentified = true;
+                
+                document.getElementById('questionMurderer').style.display = 'none';
+                document.getElementById('questionMurderEvidence').style.display = 'block';
+                
+                generateEvidenceGrid('murderEvidenceGrid', 'MURDERER');
+                
+            } else {
+                errorEl.textContent = 'Resposta incorreta. Analise as evidências com atenção.';
+                errorEl.style.display = 'block';
+                document.getElementById('murdererName').style.borderColor = '#ff6b6b';
+                setTimeout(() => {
+                    document.getElementById('murdererName').style.borderColor = '#2d4a80';
+                }, 2000);
+            }
+        }
+        
+        function checkMurderEvidence() {
+            const errorEl = document.getElementById('murderEvidenceError');
+            errorEl.style.display = 'none';
+            
+            if (selectedMurderEvidences.size === 0) {
+                errorEl.textContent = 'Selecione 4 evidências.';
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            const selectedArray = Array.from(selectedMurderEvidences);
+            
+            const allCorrect = selectedArray.length === correctMurderEvidences.length &&
+                              selectedArray.every(ev => correctMurderEvidences.includes(ev));
+            
+            if (allCorrect) {
+                document.getElementById('questionMurderEvidence').style.display = 'none';
+                document.getElementById('murderInvestigationComplete').style.display = 'block';
+            } else {
+                errorEl.textContent = 'Combinação incorreta de evidências.';
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        function backToMurdererQuestion() {
+            document.getElementById('questionMurderEvidence').style.display = 'none';
+            document.getElementById('questionMurderer').style.display = 'block';
+        }
+        
+        function goToObjectiveC() {
+            showScreen(objetivoCContainer);
+        }
+        
+        function downloadConfissaoPDF() {
+            const link = document.createElement('a');
+            link.href = 'pdfs/confissao.pdf';
+            link.download = 'confissao.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function downloadResolucaoPDF() {
+            const link = document.createElement('a');
+            link.href = 'pdfs/resolucao.pdf';
+            link.download = 'resolucao.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // ========== FUNÇÕES AUXILIARES ==========
+        function generateEvidenceGrid(gridId, context) {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = '';
+            
+            allEvidences.forEach(evidence => {
+                const div = document.createElement('div');
+                div.className = 'evidence-option';
+                
+                if (context === 'MURDERER') {
+                    div.onclick = () => toggleMurderEvidence(evidence, div);
+                } else if (gridId === 'evidenceGrid1') {
+                    div.onclick = () => toggleEvidence(evidence, div, 'evidenceGrid1');
+                } else {
+                    div.onclick = () => toggleEvidence(evidence, div, 'evidenceGrid2');
+                }
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'evidence-checkbox';
+                checkbox.id = `${gridId}-${evidence.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                
+                const label = document.createElement('label');
+                label.className = 'evidence-label';
+                label.htmlFor = checkbox.id;
+                label.textContent = evidence;
+                
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                grid.appendChild(div);
+            });
+        }
+        
+        function toggleEvidence(evidence, element, gridId) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            
+            if (gridId === 'evidenceGrid1') {
+                if (checkbox.checked) {
+                    selectedEvidences1.add(evidence);
+                    element.classList.add('selected');
+                } else {
+                    selectedEvidences1.delete(evidence);
+                    element.classList.remove('selected');
+                }
+            } else {
+                if (checkbox.checked) {
+                    selectedEvidences2.add(evidence);
+                    element.classList.add('selected');
+                } else {
+                    selectedEvidences2.delete(evidence);
+                    element.classList.remove('selected');
+                }
+            }
+        }
+        
+        function toggleMurderEvidence(evidence, element) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                selectedMurderEvidences.add(evidence);
+                element.classList.add('selected');
+            } else {
+                selectedMurderEvidences.delete(evidence);
+                element.classList.remove('selected');
+            }
+        }
+        
+        // ========== EVENT LISTENERS ==========
+        loginBtn.addEventListener('click', login);
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+        
+        logoutBtn.addEventListener('click', logout);
+        backFromObjetivoA.addEventListener('click', backToDashboardFromA);
+        backFromObjetivoB.addEventListener('click', backToObjetivoAFromB);
+        backFromObjetivoC.addEventListener('click', backToObjetivoBFromC);
+        backFromFinal.addEventListener('click', logout);
+        nextToObjetivoB.addEventListener('click', showObjetivoB);
+        
+        objetivoA.addEventListener('click', showObjetivoA);
+        objetivoB.addEventListener('click', showObjetivoB);
+        objetivoC.addEventListener('click', showObjetivoC);
+        
+        // Inicialização - campos de login vazios
+        window.addEventListener('DOMContentLoaded', () => {
+            showScreen(loginContainer);
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+    </script>
+</body>
+</html>
