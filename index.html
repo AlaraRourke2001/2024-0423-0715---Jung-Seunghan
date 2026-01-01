@@ -450,11 +450,31 @@
             margin-bottom: 20px;
             animation: pulse 2s infinite;
         }
+        
+        /* NOVOS ESTILOS PARA A LOGO */
+        .logo-container {
+            text-align: center;
+            margin: 0 auto 20px auto;
+            padding: 10px;
+        }
+        
+        .game-logo {
+            max-width: 300px;
+            max-height: 150px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(77, 171, 247, 0.2);
+        }
+        
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+        
         @media (max-width: 768px) {
             .container { border-radius: 10px; }
             .portal-screen { padding: 25px 20px; }
@@ -468,6 +488,16 @@
             .downloads-container { flex-direction: column; align-items: center; }
             .final-title { font-size: 2rem; }
             .final-text { font-size: 1.2rem; }
+            
+            /* Ajustes da logo para mobile */
+            .game-logo {
+                max-width: 250px;
+                max-height: 120px;
+            }
+            
+            .logo-container {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -478,6 +508,12 @@
             <div class="police-badge">
                 <i class="fas fa-shield-alt"></i>
             </div>
+            
+            <!-- LOGO DO JOGO ADICIONADA AQUI -->
+            <div class="logo-container">
+                <img src="imagens/logo.png" alt="Logo do Jogo" class="game-logo">
+            </div>
+            
             <h1>BANCO DE DADOS DA POLÍCIA</h1>
             <div class="login-form">
                 <div class="form-group">
@@ -504,6 +540,12 @@
             <div class="police-badge">
                 <i class="fas fa-shield-alt"></i>
             </div>
+            
+            <!-- LOGO DO JOGO ADICIONADA AQUI -->
+            <div class="logo-container">
+                <img src="imagens/logo.png" alt="Logo do Jogo" class="game-logo">
+            </div>
+            
             <h1>BANCO DE DADOS DA POLÍCIA <span class="badge">Sistema Interno</span></h1>
             <div class="welcome-message" id="welcomeMessage">Bem-vindo, detetive! Selecione um objetivo para continuar.</div>
             <div class="dashboard">
@@ -542,6 +584,12 @@
             <div class="police-badge">
                 <i class="fas fa-fingerprint"></i>
             </div>
+            
+            <!-- LOGO DO JOGO ADICIONADA AQUI -->
+            <div class="logo-container">
+                <img src="imagens/logo.png" alt="Logo do Jogo" class="game-logo">
+            </div>
+            
             <h1>DOCUMENTOS DO CASO <span class="badge">OBJETIVO A</span></h1>
             <div class="welcome-message" id="objetivoAWelcome">Selecione o suspeito:</div>
             
@@ -621,6 +669,12 @@
             <div class="police-badge">
                 <i class="fas fa-folder-open"></i>
             </div>
+            
+            <!-- LOGO DO JOGO ADICIONADA AQUI -->
+            <div class="logo-container">
+                <img src="imagens/logo.png" alt="Logo do Jogo" class="game-logo">
+            </div>
+            
             <h1>ANÁLISE DE EVIDÊNCIAS <span class="badge">OBJETIVO B</span></h1>
             <div class="welcome-message">Identifique os três suspeitos inocentes.</div>
             
@@ -768,6 +822,12 @@
             <div class="police-badge">
                 <i class="fas fa-microscope"></i>
             </div>
+            
+            <!-- LOGO DO JOGO ADICIONADA AQUI -->
+            <div class="logo-container">
+                <img src="imagens/logo.png" alt="Logo do Jogo" class="game-logo">
+            </div>
+            
             <h1>ENCONTRE O ASSASSINO <span class="badge">OBJETIVO C</span></h1>
             <div class="welcome-message" id="objetivoCWelcome">Identifique o culpado e as evidências conclusivas.</div>
             
@@ -849,6 +909,11 @@
             
             <div class="celebration-icon">
                 <i class="fas fa-trophy"></i>
+            </div>
+            
+            <!-- LOGO DO JOGO ADICIONADA AQUI -->
+            <div class="logo-container">
+                <img src="imagens/logo.png" alt="Logo do Jogo" class="game-logo">
             </div>
             
             <h1>CASO RESOLVIDO! <span class="badge">MISSÃO CUMPRIDA</span></h1>
@@ -1541,4 +1606,3 @@
     </script>
 </body>
 </html>
-
