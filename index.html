@@ -451,16 +451,16 @@
             animation: pulse 2s infinite;
         }
         
-        /* NOVOS ESTILOS PARA A LOGO */
+        /* NOVOS ESTILOS PARA A LOGO - MODIFICADOS */
         .logo-container {
             text-align: center;
-            margin: 0 auto 20px auto;
-            padding: 10px;
+            margin: 0 auto 10px auto; /* Reduzido de 20px para 10px */
+            padding: 5px; /* Reduzido de 10px para 5px */
         }
         
         .game-logo {
-            max-width: 300px;
-            max-height: 150px;
+            max-width: 400px; /* Aumentado de 300px para 400px */
+            max-height: 200px; /* Aumentado de 150px para 200px */
             width: auto;
             height: auto;
             object-fit: contain;
@@ -474,13 +474,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 300px;
-            height: 150px;
-            margin: 0 auto 20px auto;
+            width: 400px; /* Aumentado de 300px para 400px */
+            height: 200px; /* Aumentado de 150px para 200px */
+            margin: 0 auto 10px auto; /* Reduzido de 20px para 10px */
             background: linear-gradient(135deg, #1c7ed6, #4dabf7);
             border-radius: 10px;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.8rem; /* Aumentado de 1.5rem para 1.8rem */
             font-weight: bold;
             border: 2px solid rgba(77, 171, 247, 0.2);
         }
@@ -507,18 +507,18 @@
             
             /* Ajustes da logo para mobile */
             .game-logo {
-                max-width: 250px;
-                max-height: 120px;
+                max-width: 320px; /* Aumentado de 250px para 320px */
+                max-height: 160px; /* Aumentado de 120px para 160px */
             }
             
             .logo-container {
-                margin-bottom: 15px;
+                margin-bottom: 10px; /* Reduzido de 15px para 10px */
             }
             
             .logo-placeholder {
-                width: 250px;
-                height: 120px;
-                font-size: 1.2rem;
+                width: 320px; /* Aumentado de 250px para 320px */
+                height: 160px; /* Aumentado de 120px para 160px */
+                font-size: 1.5rem; /* Aumentado de 1.2rem para 1.5rem */
             }
         }
     </style>
@@ -527,9 +527,7 @@
     <!-- Tela de Login (inicial) -->
     <div class="container" id="loginContainer">
         <div class="portal-screen" id="loginScreen">
-            <div class="police-badge">
-                <i class="fas fa-shield-alt"></i>
-            </div>
+            <!-- POLICE BADGE REMOVIDO DA TELA INICIAL -->
             
             <!-- LOGO DO JOGO ADICIONADA AQUI -->
             <div class="logo-container">
@@ -563,6 +561,7 @@
     <div class="container" id="dashboardContainer" style="display: none;">
         <div class="portal-screen" id="dashboardScreen">
             <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Encerrar Sessão</button>
+            <!-- POLICE BADGE MANTIDO NO DASHBOARD -->
             <div class="police-badge">
                 <i class="fas fa-shield-alt"></i>
             </div>
