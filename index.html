@@ -622,7 +622,7 @@
                 <i class="fas fa-folder-open"></i>
             </div>
             <h1>ANÁLISE DE EVIDÊNCIAS <span class="badge">OBJETIVO B</span></h1>
-            <div class="welcome-message">Analise as evidências e identifique os suspeitos inocentes.</div>
+            <div class="welcome-message">Analise as evidências e identifique os TRÊS suspeitos inocentes.</div>
             
             <!-- Opções do Objetivo B -->
             <div class="investigation-options">
@@ -711,10 +711,43 @@
                     <div class="error-message" id="evidence2Error"></div>
                 </div>
                 
+                <!-- SUSPEITO 3: Nome -->
+                <div class="question-container" id="questionSuspect3" style="display: none;">
+                    <div class="question-number">SUSPEITO INOCENTE 3</div>
+                    <div class="question-text">Identifique o terceiro suspeito que pode ser inocentado (digite em MAIÚSCULO):</div>
+                    <input type="text" id="suspect3Name" placeholder="Nome do suspeito" style="width: 100%;">
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkSuspect3()">Verificar</button>
+                        <button class="btn" onclick="backToEvidence2()" style="background: #868e96;">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                    <div class="error-message" id="suspect3Error"></div>
+                </div>
+                
+                <!-- SUSPEITO 3: Evidências -->
+                <div class="question-container" id="questionEvidence3" style="display: none;">
+                    <div class="question-number">EVIDÊNCIAS PARA SUSPEITO 3</div>
+                    <div class="question-text">Selecione as evidências que comprovam a inocência de <span id="currentSuspect3"></span>:</div>
+                    <div class="evidence-counter" id="counter3"></div>
+                    
+                    <div class="evidence-grid" id="evidenceGrid3">
+                        <!-- As opções serão inseridas aqui pelo JavaScript -->
+                    </div>
+                    
+                    <div class="buttons-container">
+                        <button class="btn" onclick="checkEvidence3()">Verificar Evidências</button>
+                        <button class="btn" onclick="backToSuspect3()" style="background: #868e96;">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                    <div class="error-message" id="evidence3Error"></div>
+                </div>
+                
                 <!-- Conclusão -->
                 <div id="investigationComplete" style="display: none; text-align: center; margin-top: 30px;">
                     <div class="success-message" style="display: block;">
-                        <i class="fas fa-check-circle"></i> Análise completa! Ambos os suspeitos inocentes identificados.
+                        <i class="fas fa-check-circle"></i> Análise completa! Todos os três suspeitos inocentes identificados.
                     </div>
                     <button class="btn btn-next" onclick="goToObjectiveC()">
                         <i class="fas fa-arrow-right"></i> Prosseguir para o Objetivo C
@@ -887,8 +920,10 @@
         // ========== VARIÁVEIS DO SISTEMA DE INVESTIGAÇÃO ==========
         let suspect1 = null;
         let suspect2 = null;
+        let suspect3 = null;
         let selectedEvidences1 = new Set();
         let selectedEvidences2 = new Set();
+        let selectedEvidences3 = new Set();
         let currentStep = 1;
         
         // ========== VARIÁVEIS DO OBJETIVO C ==========
@@ -934,11 +969,15 @@
             "Ultrassom - Song Mina"
         ];
         
-        // Respostas corretas OBJETIVO B
+        // Respostas corretas OBJETIVO B - AGORA COM 3 SUSPEITOS
         const correctAnswers = {
             "SONG MINA": ["Declaração - Song Mina", "Foto no restaurante - Song Mina"],
-            "LEE SEOJUN": ["Depoimento - Lee Seojun"]
+            "LEE SEOJUN": ["Depoimento - Lee Seojun"],
+            "CHOI HANA": ["Post no Instagram - Choi Hana"]
         };
+        
+        // Todas as respostas corretas (todos os 3 suspeitos)
+        const allCorrectSuspects = ["SONG MINA", "LEE SEOJUN", "CHOI HANA"];
         
         // Respostas corretas OBJETIVO C
         const correctMurderer = "KIM HYUNWOO";
@@ -1052,22 +1091,29 @@
         function resetInvestigation() {
             suspect1 = null;
             suspect2 = null;
+            suspect3 = null;
             selectedEvidences1.clear();
             selectedEvidences2.clear();
+            selectedEvidences3.clear();
             currentStep = 1;
             
             document.getElementById('questionSuspect1').style.display = 'block';
             document.getElementById('questionEvidence1').style.display = 'none';
             document.getElementById('questionSuspect2').style.display = 'none';
             document.getElementById('questionEvidence2').style.display = 'none';
+            document.getElementById('questionSuspect3').style.display = 'none';
+            document.getElementById('questionEvidence3').style.display = 'none';
             document.getElementById('investigationComplete').style.display = 'none';
             
             document.getElementById('suspect1Name').value = '';
             document.getElementById('suspect2Name').value = '';
+            document.getElementById('suspect3Name').value = '';
             document.getElementById('suspect1Error').style.display = 'none';
             document.getElementById('suspect2Error').style.display = 'none';
+            document.getElementById('suspect3Error').style.display = 'none';
             document.getElementById('evidence1Error').style.display = 'none';
             document.getElementById('evidence2Error').style.display = 'none';
+            document.getElementById('evidence3Error').style.display = 'none';
         }
         
         // ========== SUSPEITO 1 ==========
@@ -1077,7 +1123,8 @@
             
             errorEl.style.display = 'none';
             
-            if (input === 'SONG MINA' || input === 'LEE SEOJUN') {
+            // Verifica se é um dos 3 suspeitos corretos
+            if (allCorrectSuspects.includes(input)) {
                 suspect1 = input;
                 document.getElementById('currentSuspect1').textContent = input;
                 
@@ -1139,7 +1186,8 @@
             
             errorEl.style.display = 'none';
             
-            if ((input === 'SONG MINA' || input === 'LEE SEOJUN') && input !== suspect1) {
+            // Verifica se é um dos 3 suspeitos corretos e não foi escolhido ainda
+            if (allCorrectSuspects.includes(input) && input !== suspect1) {
                 suspect2 = input;
                 document.getElementById('currentSuspect2').textContent = input;
                 
@@ -1189,7 +1237,7 @@
             
             if (allCorrect) {
                 document.getElementById('questionEvidence2').style.display = 'none';
-                document.getElementById('investigationComplete').style.display = 'block';
+                document.getElementById('questionSuspect3').style.display = 'block';
             } else {
                 errorEl.textContent = 'Combinação incorreta de evidências.';
                 errorEl.style.display = 'block';
@@ -1204,6 +1252,81 @@
         function backToEvidence1() {
             document.getElementById('questionSuspect2').style.display = 'none';
             document.getElementById('questionEvidence1').style.display = 'block';
+        }
+        
+        // ========== SUSPEITO 3 ==========
+        function checkSuspect3() {
+            const input = document.getElementById('suspect3Name').value.trim();
+            const errorEl = document.getElementById('suspect3Error');
+            
+            errorEl.style.display = 'none';
+            
+            // Verifica se é um dos 3 suspeitos corretos e não foi escolhido ainda
+            if (allCorrectSuspects.includes(input) && input !== suspect1 && input !== suspect2) {
+                suspect3 = input;
+                document.getElementById('currentSuspect3').textContent = input;
+                
+                document.getElementById('questionSuspect3').style.display = 'none';
+                document.getElementById('questionEvidence3').style.display = 'block';
+                
+                const count = correctAnswers[suspect3].length;
+                document.getElementById('counter3').textContent = 
+                    count === 1 ? "Selecione 1 evidência" : "Selecione 2 evidências";
+                
+                generateEvidenceGrid('evidenceGrid3', suspect3);
+                
+            } else if (input === suspect1 || input === suspect2) {
+                errorEl.textContent = 'Este suspeito já foi identificado.';
+                errorEl.style.display = 'block';
+                document.getElementById('suspect3Name').style.borderColor = '#ff6b6b';
+                setTimeout(() => {
+                    document.getElementById('suspect3Name').style.borderColor = '#2d4a80';
+                }, 2000);
+            } else {
+                errorEl.textContent = 'Resposta incorreta. Continue analisando as evidências.';
+                errorEl.style.display = 'block';
+                document.getElementById('suspect3Name').style.borderColor = '#ff6b6b';
+                setTimeout(() => {
+                    document.getElementById('suspect3Name').style.borderColor = '#2d4a80';
+                }, 2000);
+            }
+        }
+        
+        function checkEvidence3() {
+            const errorEl = document.getElementById('evidence3Error');
+            errorEl.style.display = 'none';
+            
+            if (selectedEvidences3.size === 0) {
+                const count = correctAnswers[suspect3].length;
+                errorEl.textContent = count === 1 ? 
+                    "Selecione 1 evidência." : "Selecione 2 evidências.";
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            const correct = correctAnswers[suspect3];
+            const selectedArray = Array.from(selectedEvidences3);
+            
+            const allCorrect = selectedArray.length === correct.length &&
+                              selectedArray.every(ev => correct.includes(ev));
+            
+            if (allCorrect) {
+                document.getElementById('questionEvidence3').style.display = 'none';
+                document.getElementById('investigationComplete').style.display = 'block';
+            } else {
+                errorEl.textContent = 'Combinação incorreta de evidências.';
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        function backToSuspect3() {
+            document.getElementById('questionEvidence3').style.display = 'none';
+            document.getElementById('questionSuspect3').style.display = 'block';
+        }
+        
+        function backToEvidence2() {
+            document.getElementById('questionSuspect3').style.display = 'none';
+            document.getElementById('questionEvidence2').style.display = 'block';
         }
         
         // ========== FUNÇÕES DO OBJETIVO C ==========
@@ -1326,8 +1449,10 @@
                     div.onclick = () => toggleMurderEvidence(evidence, div);
                 } else if (gridId === 'evidenceGrid1') {
                     div.onclick = () => toggleEvidence(evidence, div, 'evidenceGrid1');
-                } else {
+                } else if (gridId === 'evidenceGrid2') {
                     div.onclick = () => toggleEvidence(evidence, div, 'evidenceGrid2');
+                } else {
+                    div.onclick = () => toggleEvidence(evidence, div, 'evidenceGrid3');
                 }
                 
                 const checkbox = document.createElement('input');
@@ -1358,12 +1483,20 @@
                     selectedEvidences1.delete(evidence);
                     element.classList.remove('selected');
                 }
-            } else {
+            } else if (gridId === 'evidenceGrid2') {
                 if (checkbox.checked) {
                     selectedEvidences2.add(evidence);
                     element.classList.add('selected');
                 } else {
                     selectedEvidences2.delete(evidence);
+                    element.classList.remove('selected');
+                }
+            } else {
+                if (checkbox.checked) {
+                    selectedEvidences3.add(evidence);
+                    element.classList.add('selected');
+                } else {
+                    selectedEvidences3.delete(evidence);
                     element.classList.remove('selected');
                 }
             }
