@@ -126,12 +126,12 @@
         }
         /* BOTÕES DE DOWNLOAD AGORA EM AZUL */
         .btn-download {
-            background: linear-gradient(90deg, #1c7ed6, #4dabf7); /* Alterado de vermelho para azul */
+            background: linear-gradient(90deg, #1c7ed6, #4dabf7);
             margin: 6px;
             width: 220px;
         }
         .btn-download:hover {
-            background: linear-gradient(90deg, #1864ab, #339af0); /* Alterado para azul mais escuro */
+            background: linear-gradient(90deg, #1864ab, #339af0);
         }
         .objectives-container {
             display: grid;
@@ -432,7 +432,7 @@
         }
         /* EMOJI DE TROFÉU REMOVIDO */
         
-        /* NOVOS ESTILOS PARA A LOGO - SEM MOLDURA */
+        /* NOVOS ESTILOS PARA A LOGO - SEM MOLDURA E SEM BORDA */
         .logo-container {
             text-align: center;
             margin: 0 auto 6px auto;
@@ -445,9 +445,10 @@
             width: auto;
             height: auto;
             object-fit: contain;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-radius: 0; /* REMOVIDA BORDA ARREDONDADA */
+            box-shadow: none; /* REMOVIDA SOMBRA */
             border: none; /* REMOVIDA A MOLDURA */
+            background: transparent; /* REMOVIDO BACKGROUND */
         }
         
         /* Estilo alternativo caso a imagem não carregue */
@@ -458,8 +459,8 @@
             width: 340px;
             height: 170px;
             margin: 0 auto 6px auto;
-            background: linear-gradient(135deg, #1c7ed6, #4dabf7);
-            border-radius: 8px;
+            background: transparent; /* REMOVIDO BACKGROUND */
+            border-radius: 0; /* REMOVIDA BORDA ARREDONDADA */
             color: white;
             font-size: 1.5rem;
             font-weight: bold;
@@ -947,8 +948,6 @@
             <h1>CASO RESOLVIDO! <span class="badge">MISSÃO CUMPRIDA</span></h1>
             
             <div class="final-message">
-                <!-- TEXTO "BOM TRABALHO, DETETIVE!" REMOVIDO -->
-                
                 <div class="final-text">
                     Graças às suas excepcionais habilidades de dedução, 
                     <strong>Kim Hyunwoo</strong> foi preso e confessou o assassinato de Jung Seunghan.
@@ -975,9 +974,6 @@
             
             <div class="footer">
                 <p>Departamento de Polícia de Seul - Agradece seu serviço exemplar</p>
-                <p style="margin-top: 8px; color: #4dabf7; font-size: 0.75rem;">
-                    <i class="fas fa-star"></i> Caso concluído com sucesso
-                </p>
             </div>
         </div>
     </div>
